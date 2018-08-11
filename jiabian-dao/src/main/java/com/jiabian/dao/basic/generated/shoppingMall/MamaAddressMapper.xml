@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiabian.dao.basic.shoppingMall.MamaAddressMapper" >
+    <resultMap id="BaseResultMap" type="com.jiabian.beans.basic.shoppingMall.MamaAddress" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="userid" property="userid" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="LONGVARCHAR" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="label" property="label" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, userid, name, address, telephone, type, label
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiabian.beans.basic.shoppingMall.MamaAddressQueryHelper" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from mama_address
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from mama_address
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.jiabian.beans.basic.shoppingMall.MamaAddress" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_address (userid, name, address, 
+            telephone, type, label
+            )
+        values (#{userid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR}, 
+            #{telephone,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{label,jdbcType=TINYINT}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaAddress" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_address
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userid != null" >
+                userid,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="telephone != null" >
+                telephone,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="label != null" >
+                label,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userid != null" >
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="telephone != null" >
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="label != null" >
+                #{label,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaAddressQueryHelper" resultType="java.lang.Integer" >
+        select count(*) from mama_address
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update mama_address
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.userid != null" >
+                userid = #{record.userid,jdbcType=BIGINT},
+            </if>
+            <if test="record.name != null" >
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.address != null" >
+                address = #{record.address,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.telephone != null" >
+                telephone = #{record.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null" >
+                type = #{record.type,jdbcType=TINYINT},
+            </if>
+            <if test="record.label != null" >
+                label = #{record.label,jdbcType=TINYINT},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update mama_address
+        set id = #{record.id,jdbcType=BIGINT},
+            userid = #{record.userid,jdbcType=BIGINT},
+            name = #{record.name,jdbcType=VARCHAR},
+            address = #{record.address,jdbcType=LONGVARCHAR},
+            telephone = #{record.telephone,jdbcType=VARCHAR},
+            type = #{record.type,jdbcType=TINYINT},
+            label = #{record.label,jdbcType=TINYINT}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaAddress" >
+        update mama_address
+        <set >
+            <if test="userid != null" >
+                userid = #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="telephone != null" >
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="label != null" >
+                label = #{label,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from mama_address
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaAddressQueryHelper" >
+        delete from mama_address
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+	
+	<select id="countMamaAddressByUserId" parameterType="java.util.Map" resultType="int">
+		select count(*)
+		<include refid="add"></include>
+		where true
+		<if test="id != null">
+			and userid = #{id}
+		</if>
+	</select>
+	
+	<select id="selectMamaAddressByUserId" parameterType="java.util.Map" resultType="com.jiabian.mama.response.MamaAddressRes">
+		select *
+		<include refid="add"></include>
+		where true
+		<if test="id != null">
+			and userid = #{id}
+		</if>
+		<if test="pagesModel.orderBy != null">
+			order by ${pagesModel.orderBy}
+		</if>
+		<if test="pagesModel.doPage">
+			LIMIT #{pagesModel.limitStart,jdbcType=INTEGER},
+			#{pagesModel.limitNum,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<sql id="add">
+		from mama_address
+	</sql>
+
+</mapper>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiabian.dao.basic.dada.ConfigSeriesMapper" >
+    <resultMap id="BaseResultMap" type="com.jiabian.beans.basic.dada.ConfigSeries" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cx_id" property="cx_id" jdbcType="VARCHAR" />
+        <result column="zm" property="zm" jdbcType="VARCHAR" />
+        <result column="logo_id" property="logo_id" jdbcType="VARCHAR" />
+        <result column="chexi" property="chexi" jdbcType="VARCHAR" />
+        <result column="changjia" property="changjia" jdbcType="VARCHAR" />
+        <result column="dijia" property="dijia" jdbcType="VARCHAR" />
+        <result column="gaojia" property="gaojia" jdbcType="VARCHAR" />
+        <result column="img" property="img" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, cx_id, zm, logo_id, chexi, changjia, dijia, gaojia, img, time
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiabian.beans.basic.dada.ConfigSeriesQueryHelper" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from config_series
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from config_series
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" parameterType="com.jiabian.beans.basic.dada.ConfigSeries" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into config_series (cx_id, zm, logo_id, 
+            chexi, changjia, dijia, 
+            gaojia, img, time
+            )
+        values (#{cx_id,jdbcType=VARCHAR}, #{zm,jdbcType=VARCHAR}, #{logo_id,jdbcType=VARCHAR}, 
+            #{chexi,jdbcType=VARCHAR}, #{changjia,jdbcType=VARCHAR}, #{dijia,jdbcType=VARCHAR}, 
+            #{gaojia,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jiabian.beans.basic.dada.ConfigSeries" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into config_series
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="cx_id != null" >
+                cx_id,
+            </if>
+            <if test="zm != null" >
+                zm,
+            </if>
+            <if test="logo_id != null" >
+                logo_id,
+            </if>
+            <if test="chexi != null" >
+                chexi,
+            </if>
+            <if test="changjia != null" >
+                changjia,
+            </if>
+            <if test="dijia != null" >
+                dijia,
+            </if>
+            <if test="gaojia != null" >
+                gaojia,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="time != null" >
+                time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="cx_id != null" >
+                #{cx_id,jdbcType=VARCHAR},
+            </if>
+            <if test="zm != null" >
+                #{zm,jdbcType=VARCHAR},
+            </if>
+            <if test="logo_id != null" >
+                #{logo_id,jdbcType=VARCHAR},
+            </if>
+            <if test="chexi != null" >
+                #{chexi,jdbcType=VARCHAR},
+            </if>
+            <if test="changjia != null" >
+                #{changjia,jdbcType=VARCHAR},
+            </if>
+            <if test="dijia != null" >
+                #{dijia,jdbcType=VARCHAR},
+            </if>
+            <if test="gaojia != null" >
+                #{gaojia,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                #{time,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.jiabian.beans.basic.dada.ConfigSeriesQueryHelper" resultType="java.lang.Integer" >
+        select count(*) from config_series
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update config_series
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.cx_id != null" >
+                cx_id = #{record.cx_id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.zm != null" >
+                zm = #{record.zm,jdbcType=VARCHAR},
+            </if>
+            <if test="record.logo_id != null" >
+                logo_id = #{record.logo_id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.chexi != null" >
+                chexi = #{record.chexi,jdbcType=VARCHAR},
+            </if>
+            <if test="record.changjia != null" >
+                changjia = #{record.changjia,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dijia != null" >
+                dijia = #{record.dijia,jdbcType=VARCHAR},
+            </if>
+            <if test="record.gaojia != null" >
+                gaojia = #{record.gaojia,jdbcType=VARCHAR},
+            </if>
+            <if test="record.img != null" >
+                img = #{record.img,jdbcType=VARCHAR},
+            </if>
+            <if test="record.time != null" >
+                time = #{record.time,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update config_series
+        set id = #{record.id,jdbcType=INTEGER},
+            cx_id = #{record.cx_id,jdbcType=VARCHAR},
+            zm = #{record.zm,jdbcType=VARCHAR},
+            logo_id = #{record.logo_id,jdbcType=VARCHAR},
+            chexi = #{record.chexi,jdbcType=VARCHAR},
+            changjia = #{record.changjia,jdbcType=VARCHAR},
+            dijia = #{record.dijia,jdbcType=VARCHAR},
+            gaojia = #{record.gaojia,jdbcType=VARCHAR},
+            img = #{record.img,jdbcType=VARCHAR},
+            time = #{record.time,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jiabian.beans.basic.dada.ConfigSeries" >
+        update config_series
+        <set >
+            <if test="cx_id != null" >
+                cx_id = #{cx_id,jdbcType=VARCHAR},
+            </if>
+            <if test="zm != null" >
+                zm = #{zm,jdbcType=VARCHAR},
+            </if>
+            <if test="logo_id != null" >
+                logo_id = #{logo_id,jdbcType=VARCHAR},
+            </if>
+            <if test="chexi != null" >
+                chexi = #{chexi,jdbcType=VARCHAR},
+            </if>
+            <if test="changjia != null" >
+                changjia = #{changjia,jdbcType=VARCHAR},
+            </if>
+            <if test="dijia != null" >
+                dijia = #{dijia,jdbcType=VARCHAR},
+            </if>
+            <if test="gaojia != null" >
+                gaojia = #{gaojia,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                time = #{time,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from config_series
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.jiabian.beans.basic.dada.ConfigSeriesQueryHelper" >
+        delete from config_series
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+	<select id="selectSeries" parameterType="com.jiabian.base.PagesModel" resultType="com.jiabian.dada.response.ConfigSeriesRes">
+		select *
+		<include refid="add"></include>
+		<if test="orderBy != null">
+    		order by ${orderBy}
+    	</if>
+    	<if test="doPage">
+    		LIMIT #{limitStart,jdbcType=INTEGER},
+            #{limitNum,jdbcType=INTEGER}
+    	</if>
+	</select>
+	
+	<select id="selectSeriesByCondition" parameterType="java.util.Map" resultType="com.jiabian.dada.response.ConfigSeriesRes">
+		select *
+		<include refid="add"></include>
+		where true
+		<if test="condition != ''">
+    		${condition}
+    	</if>
+    	<if test="pagesModel.orderBy != null">
+    		order by ${pagesModel.orderBy}
+    	</if>
+	</select>
+
+	<sql id="add">
+		from config_series
+	</sql>
+
+</mapper>

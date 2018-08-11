@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiabian.dao.basic.shoppingMall.MamaGoodsMapper" >
+    <resultMap id="BaseResultMap" type="com.jiabian.beans.basic.shoppingMall.MamaGoods" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="img" property="img" jdbcType="LONGVARCHAR" />
+        <result column="price" property="price" jdbcType="DOUBLE" />
+        <result column="orgPrice" property="orgPrice" jdbcType="DOUBLE" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="details" property="details" jdbcType="LONGVARCHAR" />
+        <result column="volume" property="volume" jdbcType="INTEGER" />
+        <result column="banner" property="banner" jdbcType="VARCHAR" />
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="isDel" property="isDel" jdbcType="TINYINT" />
+        <result column="freight" property="freight" jdbcType="DOUBLE" />
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="numberPeople" property="numberPeople" jdbcType="INTEGER" />
+        <result column="collagePrice" property="collagePrice" jdbcType="DECIMAL" />
+        <result column="stock" property="stock" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, name, img, price, orgPrice, type, details, volume, banner, updateTime, createTime, 
+        isDel, freight, endTime, numberPeople, collagePrice, stock
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiabian.beans.basic.shoppingMall.MamaGoodsQueryHelper" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from mama_goods
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from mama_goods
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.jiabian.beans.basic.shoppingMall.MamaGoods" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_goods (name, img, price, 
+            orgPrice, type, details, 
+            volume, banner, updateTime, 
+            createTime, isDel, freight, 
+            endTime, numberPeople, collagePrice, 
+            stock)
+        values (#{name,jdbcType=VARCHAR}, #{img,jdbcType=LONGVARCHAR}, #{price,jdbcType=DOUBLE}, 
+            #{orgPrice,jdbcType=DOUBLE}, #{type,jdbcType=TINYINT}, #{details,jdbcType=LONGVARCHAR}, 
+            #{volume,jdbcType=INTEGER}, #{banner,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=TINYINT}, #{freight,jdbcType=DOUBLE}, 
+            #{endTime,jdbcType=TIMESTAMP}, #{numberPeople,jdbcType=INTEGER}, #{collagePrice,jdbcType=DECIMAL}, 
+            #{stock,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaGoods" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_goods
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="img != null" >
+                img,
+            </if>
+            <if test="price != null" >
+                price,
+            </if>
+            <if test="orgPrice != null" >
+                orgPrice,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="details != null" >
+                details,
+            </if>
+            <if test="volume != null" >
+                volume,
+            </if>
+            <if test="banner != null" >
+                banner,
+            </if>
+            <if test="updateTime != null" >
+                updateTime,
+            </if>
+            <if test="createTime != null" >
+                createTime,
+            </if>
+            <if test="isDel != null" >
+                isDel,
+            </if>
+            <if test="freight != null" >
+                freight,
+            </if>
+            <if test="endTime != null" >
+                endTime,
+            </if>
+            <if test="numberPeople != null" >
+                numberPeople,
+            </if>
+            <if test="collagePrice != null" >
+                collagePrice,
+            </if>
+            <if test="stock != null" >
+                stock,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                #{img,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="price != null" >
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="orgPrice != null" >
+                #{orgPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="details != null" >
+                #{details,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="volume != null" >
+                #{volume,jdbcType=INTEGER},
+            </if>
+            <if test="banner != null" >
+                #{banner,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null" >
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="freight != null" >
+                #{freight,jdbcType=DOUBLE},
+            </if>
+            <if test="endTime != null" >
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="numberPeople != null" >
+                #{numberPeople,jdbcType=INTEGER},
+            </if>
+            <if test="collagePrice != null" >
+                #{collagePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="stock != null" >
+                #{stock,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaGoodsQueryHelper" resultType="java.lang.Integer" >
+        select count(*) from mama_goods
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update mama_goods
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.name != null" >
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.img != null" >
+                img = #{record.img,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.price != null" >
+                price = #{record.price,jdbcType=DOUBLE},
+            </if>
+            <if test="record.orgPrice != null" >
+                orgPrice = #{record.orgPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="record.type != null" >
+                type = #{record.type,jdbcType=TINYINT},
+            </if>
+            <if test="record.details != null" >
+                details = #{record.details,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.volume != null" >
+                volume = #{record.volume,jdbcType=INTEGER},
+            </if>
+            <if test="record.banner != null" >
+                banner = #{record.banner,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateTime != null" >
+                updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.createTime != null" >
+                createTime = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.isDel != null" >
+                isDel = #{record.isDel,jdbcType=TINYINT},
+            </if>
+            <if test="record.freight != null" >
+                freight = #{record.freight,jdbcType=DOUBLE},
+            </if>
+            <if test="record.endTime != null" >
+                endTime = #{record.endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.numberPeople != null" >
+                numberPeople = #{record.numberPeople,jdbcType=INTEGER},
+            </if>
+            <if test="record.collagePrice != null" >
+                collagePrice = #{record.collagePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.stock != null" >
+                stock = #{record.stock,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update mama_goods
+        set id = #{record.id,jdbcType=BIGINT},
+            name = #{record.name,jdbcType=VARCHAR},
+            img = #{record.img,jdbcType=LONGVARCHAR},
+            price = #{record.price,jdbcType=DOUBLE},
+            orgPrice = #{record.orgPrice,jdbcType=DOUBLE},
+            type = #{record.type,jdbcType=TINYINT},
+            details = #{record.details,jdbcType=LONGVARCHAR},
+            volume = #{record.volume,jdbcType=INTEGER},
+            banner = #{record.banner,jdbcType=VARCHAR},
+            updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+            createTime = #{record.createTime,jdbcType=TIMESTAMP},
+            isDel = #{record.isDel,jdbcType=TINYINT},
+            freight = #{record.freight,jdbcType=DOUBLE},
+            endTime = #{record.endTime,jdbcType=TIMESTAMP},
+            numberPeople = #{record.numberPeople,jdbcType=INTEGER},
+            collagePrice = #{record.collagePrice,jdbcType=DECIMAL},
+            stock = #{record.stock,jdbcType=INTEGER}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaGoods" >
+        update mama_goods
+        <set >
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                img = #{img,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="price != null" >
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="orgPrice != null" >
+                orgPrice = #{orgPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="details != null" >
+                details = #{details,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="volume != null" >
+                volume = #{volume,jdbcType=INTEGER},
+            </if>
+            <if test="banner != null" >
+                banner = #{banner,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null" >
+                isDel = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="freight != null" >
+                freight = #{freight,jdbcType=DOUBLE},
+            </if>
+            <if test="endTime != null" >
+                endTime = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="numberPeople != null" >
+                numberPeople = #{numberPeople,jdbcType=INTEGER},
+            </if>
+            <if test="collagePrice != null" >
+                collagePrice = #{collagePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="stock != null" >
+                stock = #{stock,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from mama_goods
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaGoodsQueryHelper" >
+        delete from mama_goods
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+	<select id="countMamaGoods" parameterType="java.util.Map" resultType="int">
+    	select count(*)
+    	<include refid="add"></include>
+    	where true
+    	<if test="condition.name != null and condition.name != ''">
+    		and name like '%${condition.name}%'
+    	</if>
+    	<if test="condition.type != 0">
+    		and type = #{condition.type}
+    	</if>
+    	<if test="condition.isDel != null">
+    		and isDel = #{condition.isDel}
+    	</if>
+    </select>
+    
+    <select id="selectMamaGoods" parameterType="java.util.Map" resultType="com.jiabian.mama.response.MamaGoodsRes">
+    	select *
+    	<include refid="add"></include>
+    	where true
+    	<if test="condition.name != null and condition.name != ''">
+    		and name like '%${condition.name}%'
+    	</if>
+    	<if test="condition.type != 0">
+    		and type = #{condition.type}
+    	</if>
+    	<if test="condition.isDel != null">
+    		and isDel = #{condition.isDel}
+    	</if>
+    	<if test="pagesModel.orderBy != null">
+			order by ${pagesModel.orderBy}
+		</if>
+		<if test="pagesModel.doPage">
+			LIMIT #{pagesModel.limitStart,jdbcType=INTEGER},
+			#{pagesModel.limitNum,jdbcType=INTEGER}
+		</if>
+    </select>
+
+	<sql id="add">
+		from mama_goods
+	</sql>
+	
+</mapper>

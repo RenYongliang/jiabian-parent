@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>地址管理</title>
+<link rel="stylesheet" href="../css/bootstrap.min14ed.css" type="text/css">
+<link rel="stylesheet" href="../css/style.min862f.css" type="text/css">
+<link href="../content/superui/global/css/components.min.css" id="style_components" rel="stylesheet" />
+<link rel="stylesheet" href="../plugin/sweetalert/sweetalert.css" type="text/css">
+<style>
+.manage_obj {
+	width: 326px;
+	height: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.manage_obj p {
+	margin: 0;
+}
+
+.manage_obj img {
+	max-width: 30% !important;
+	max-height: 50px !important;
+}
+</style>
+</head>
+<body style="background-color:white">
+	<form id="form1" name="form1" action="../mamaAddress/selectMamaAddress?id=${userid}" method="post" class="form-horizontal">
+		<div class="panel-heading">
+		    <h4 class="modal-title"><span class="glyphicon glyphicon-plus"></span>&nbsp;地址管理</h4>
+		</div>
+		<br>
+		<div class="page-container">
+			<div class="ibox float-e-margins">
+				<div class="row">
+					<div class="col-sm-12">
+						<!-- <a class="btn default" href="../mamaAddress/toInsert?userid=${userid}"> <span
+							class="glyphicon glyphicon-plus"></span>&nbsp;添加
+						</a> -->
+						<a class="btn default" onclick="delBatch()"> <span class="glyphicon glyphicon-remove">
+							</span>&nbsp;批量删除
+						</a>
+					</div>
+				</div>
+				<div class="panel panel-default">
+				<table class="table table-hover" id="mamaAddressTable">
+					<thead>
+						<tr>
+							<th width="3%" style="text-align: center;">
+								<input type="checkbox" id="check-all"/>
+							</th>
+							<th width="10%" style="text-align: center;">用户ID</th>
+							<th width="10%" style="text-align: center;">收货人</th>
+							<th width="15%" style="text-align: center;">收货地址</th>
+							<th width="10%" style="text-align: center;">联系方式</th>
+							<th width="10%" style="text-align: center;">默认地址</th>
+							<th width="10%" style="text-align: center;">分类</th>
+							<th width="10%" style="text-align: center;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#foreach($obj in $pagesModel.results)
+						<tr>
+							<td align="center"><input type="checkbox" class="child-check" value="$!obj.id"></td>
+							<td align="center">$!obj.userid</td>
+							<td align="center">$!obj.name</td>
+							<td align="center">$!obj.address</td>
+							<td align="center">$!obj.telephone</td>
+							<td align="center">
+								#if($!obj.type == 1)
+									是
+								#else
+									否
+								#end
+							</td>
+							<td align="center">
+								#if($!obj.label == 1)
+									无
+								#elseif($!obj.label == 2)
+									家
+								#elseif($!obj.label == 3)
+									公司
+								#else
+									学校
+								#end
+							</td>
+							<td align="center">
+								<!-- <a class="btn default" href=""> 
+								   <span class="glyphicon glyphicon-pencil"></span>&nbsp;修改
+								</a> -->
+								<a class="btn default" onclick="delMamaAddress(${obj.id})"> 
+								   <span class="glyphicon glyphicon-remove"></span>&nbsp;删除
+								</a>
+							</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+			</div>
+			#parse("htmls/global/listPage.html")
+			</div>
+		</div>
+	</form>
+	<div class="panel-footer" style="text-align: center;">
+		<a style="width: 100px;"  class="btn default" href="../mamaUser/userList" onclick ="">
+			<span class="glyphicon glyphicon-remove-sign"></span>&nbsp;返回
+		</a>
+	</div>
+	<!-- 全局公共类库Begin -->
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../plugin/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript">
+		// 全选/反选
+		$("#check-all").click(function(){
+			$(".child-check").prop("checked",$(this).prop("checked"));
+		});
+		$(document).on("click",".child-check",function(){
+			var flag = $(".child-check").length == $(".child-check:checked").length;
+			$("#check-all").prop("checked",flag);
+		});
+		// 单一删除/还原
+		function delMamaAddress(id) {
+			swal({
+				title : "提示",
+				text : "确认操作吗？",
+				type : "warning",
+				showCancelButton : "true",
+				showConfirmButton : "true",
+				confirmButtonText : "确定",
+				cancelButtonText : "取消",
+				animation : "slide-from-top"
+			}, function() {
+				$.ajax({
+					url : "../mamaAddress/deleteAddress",
+					data : {
+						"id" : id,
+					},
+					type : "post",
+					success : function(data) {
+						if (data.result == 200) {
+							swal("提示", "成功", "success");
+						} else {
+							swal("提示", "失败", "warning");
+						}
+						setTimeout("$('#form1').submit();",1000);
+					}
+				});
+			});
+		}
+		// 批量删除/还原
+		function delBatch(){
+			var idList = "";
+			$(".child-check:checked").each(function(){
+				idList += $(this).val() + "-"
+			});
+			idList = idList.substring(0,idList.length-1);
+			if(idList == ""){
+				swal("提示","请选择要删除的地址","warning");
+			}else{
+				swal({
+					title : "提示",
+					text : "确认批量操作吗？",
+					type : "warning",
+					showCancelButton : "true",
+					showConfirmButton : "true",
+					confirmButtonText : "确定",
+					cancelButtonText : "取消",
+					animation : "slide-from-top"
+				}, function() {
+					$.ajax({
+						url : "../mamaAddress/delBatchAddress",
+						data : {
+							"idList" : idList,
+						},
+						type : "post",
+						success : function(data) {
+							if (data.result == 200) {
+								swal("提示", "成功", "success");
+							} else {
+								swal("提示", "失败", "warning");
+							}
+							setTimeout("$('#form1').submit();",1000);
+						}
+					});
+				});
+			}
+		}
+	</script>
+</body>
+</html>

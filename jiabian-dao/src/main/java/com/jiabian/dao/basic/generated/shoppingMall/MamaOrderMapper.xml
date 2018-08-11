@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiabian.dao.basic.shoppingMall.MamaOrderMapper" >
+    <resultMap id="BaseResultMap" type="com.jiabian.beans.basic.shoppingMall.MamaOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="userid" property="userid" jdbcType="BIGINT" />
+        <result column="goodid" property="goodid" jdbcType="BIGINT" />
+        <result column="price" property="price" jdbcType="DOUBLE" />
+        <result column="payment" property="payment" jdbcType="TINYINT" />
+        <result column="deliver" property="deliver" jdbcType="TINYINT" />
+        <result column="orderNumber" property="orderNumber" jdbcType="VARCHAR" />
+        <result column="isDel" property="isDel" jdbcType="TINYINT" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="paytime" property="paytime" jdbcType="TIMESTAMP" />
+        <result column="addressid" property="addressid" jdbcType="BIGINT" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, userid, goodid, price, payment, deliver, orderNumber, isDel, createTime, paytime, 
+        addressid
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiabian.beans.basic.shoppingMall.MamaOrderQueryHelper" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from mama_order
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from mama_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.jiabian.beans.basic.shoppingMall.MamaOrder" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_order (userid, goodid, price, 
+            payment, deliver, orderNumber, 
+            isDel, createTime, paytime, 
+            addressid)
+        values (#{userid,jdbcType=BIGINT}, #{goodid,jdbcType=BIGINT}, #{price,jdbcType=DOUBLE}, 
+            #{payment,jdbcType=TINYINT}, #{deliver,jdbcType=TINYINT}, #{orderNumber,jdbcType=VARCHAR}, 
+            #{isDel,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{paytime,jdbcType=TIMESTAMP}, 
+            #{addressid,jdbcType=BIGINT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaOrder" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userid != null" >
+                userid,
+            </if>
+            <if test="goodid != null" >
+                goodid,
+            </if>
+            <if test="price != null" >
+                price,
+            </if>
+            <if test="payment != null" >
+                payment,
+            </if>
+            <if test="deliver != null" >
+                deliver,
+            </if>
+            <if test="orderNumber != null" >
+                orderNumber,
+            </if>
+            <if test="isDel != null" >
+                isDel,
+            </if>
+            <if test="createTime != null" >
+                createTime,
+            </if>
+            <if test="paytime != null" >
+                paytime,
+            </if>
+            <if test="addressid != null" >
+                addressid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userid != null" >
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="goodid != null" >
+                #{goodid,jdbcType=BIGINT},
+            </if>
+            <if test="price != null" >
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="payment != null" >
+                #{payment,jdbcType=TINYINT},
+            </if>
+            <if test="deliver != null" >
+                #{deliver,jdbcType=TINYINT},
+            </if>
+            <if test="orderNumber != null" >
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null" >
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paytime != null" >
+                #{paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="addressid != null" >
+                #{addressid,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaOrderQueryHelper" resultType="java.lang.Integer" >
+        select count(*) from mama_order
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update mama_order
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.userid != null" >
+                userid = #{record.userid,jdbcType=BIGINT},
+            </if>
+            <if test="record.goodid != null" >
+                goodid = #{record.goodid,jdbcType=BIGINT},
+            </if>
+            <if test="record.price != null" >
+                price = #{record.price,jdbcType=DOUBLE},
+            </if>
+            <if test="record.payment != null" >
+                payment = #{record.payment,jdbcType=TINYINT},
+            </if>
+            <if test="record.deliver != null" >
+                deliver = #{record.deliver,jdbcType=TINYINT},
+            </if>
+            <if test="record.orderNumber != null" >
+                orderNumber = #{record.orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.isDel != null" >
+                isDel = #{record.isDel,jdbcType=TINYINT},
+            </if>
+            <if test="record.createTime != null" >
+                createTime = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.paytime != null" >
+                paytime = #{record.paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.addressid != null" >
+                addressid = #{record.addressid,jdbcType=BIGINT},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update mama_order
+        set id = #{record.id,jdbcType=BIGINT},
+            userid = #{record.userid,jdbcType=BIGINT},
+            goodid = #{record.goodid,jdbcType=BIGINT},
+            price = #{record.price,jdbcType=DOUBLE},
+            payment = #{record.payment,jdbcType=TINYINT},
+            deliver = #{record.deliver,jdbcType=TINYINT},
+            orderNumber = #{record.orderNumber,jdbcType=VARCHAR},
+            isDel = #{record.isDel,jdbcType=TINYINT},
+            createTime = #{record.createTime,jdbcType=TIMESTAMP},
+            paytime = #{record.paytime,jdbcType=TIMESTAMP},
+            addressid = #{record.addressid,jdbcType=BIGINT}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaOrder" >
+        update mama_order
+        <set >
+            <if test="userid != null" >
+                userid = #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="goodid != null" >
+                goodid = #{goodid,jdbcType=BIGINT},
+            </if>
+            <if test="price != null" >
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="payment != null" >
+                payment = #{payment,jdbcType=TINYINT},
+            </if>
+            <if test="deliver != null" >
+                deliver = #{deliver,jdbcType=TINYINT},
+            </if>
+            <if test="orderNumber != null" >
+                orderNumber = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null" >
+                isDel = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paytime != null" >
+                paytime = #{paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="addressid != null" >
+                addressid = #{addressid,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from mama_order
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaOrderQueryHelper" >
+        delete from mama_order
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+	<select id="countMamaOrders" parameterType="java.util.Map" resultType="int">
+		select count(*)
+		<include refid="add"/>
+		where true
+		<if test="condition.isDel != null">
+			and isDel = #{condition.isDel}
+		</if>
+		<if test="condition.payment != 0">
+			and payment = #{condition.payment}
+		</if>
+		<if test="condition.deliver != 0">
+			and payment = #{condition.deliver}
+		</if>
+		<if test="condition.orderNumber != null and condition.orderNumber != ''">
+			and orderNumber like '%${condition.orderNumber}%'
+		</if>
+	</select>
+	
+	<select id="selectMamaOrders" parameterType="java.util.Map" resultType="com.jiabian.mama.response.MamaOrderRes">
+		select *
+		<include refid="add"/>
+		where true
+		<if test="condition.isDel != null">
+			and isDel = #{condition.isDel}
+		</if>
+		<if test="condition.payment != 0">
+			and payment = #{condition.payment}
+		</if>
+		<if test="condition.deliver != 0">
+			and deliver = #{condition.deliver}
+		</if>
+		<if test="condition.orderNumber != null and condition.orderNumber != ''">
+			and orderNumber like '%${condition.orderNumber}%'
+		</if>
+		<if test="pagesModel.orderBy != null">
+			order by ${pagesModel.orderBy}
+		</if>
+		<if test="pagesModel.doPage">
+			LIMIT #{pagesModel.limitStart,jdbcType=INTEGER},
+			#{pagesModel.limitNum,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<sql id="add">
+		from mama_order
+	</sql>
+
+</mapper>

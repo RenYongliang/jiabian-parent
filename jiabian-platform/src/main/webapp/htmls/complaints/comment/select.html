@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>评论详情</title>
+<link rel="stylesheet" href="../css/bootstrap.min14ed.css" type="text/css">
+<link rel="stylesheet" href="../css/style.min862f.css" type="text/css">
+<link href="../content/superui/global/css/components.min.css" id="style_components" rel="stylesheet" />
+<link rel="stylesheet" href="../plugin/sweetalert/sweetalert.css" type="text/css">
+<style>
+.manage_obj {
+	width: 326px;
+	height: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.manage_obj p {
+	margin: 0;
+}
+
+.manage_obj img {
+	max-width: 30% !important;
+	max-height: 50px !important;
+}
+</style>
+</head>
+<body style="background-color:white">
+	<form id="form1" name="form1" action="../comments/commentList?compid=${compid}" method="post" class="form-horizontal">
+	<input type="hidden" id="id" name="id" #if($compid)value=$!id #end>
+	<input type="hidden" id="userid" name="userid" #if($userid)value=$!userid #end>
+		<div class="page-container">
+			<div class="ibox float-e-margins">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top:15px">
+							<label class="control-label col-sm-1" for="query_id">投诉单ID：</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" style="width: 200px;" id="query_id"
+									#if($id)value=$!id #end>
+							</div>
+							<label class="control-label col-sm-1" for="query_userid">用户ID：</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" style="width: 200px;" id="query_userid" #if($userid)value=$!userid #end>
+							</div>
+							<div class="col-sm-1" style="text-align:left;">
+								<button id="toCheck" type="button" style="margin-left:50px" class="btn btn-primary">
+									<span class="glyphicon glyphicon-search"></span>&nbsp;查询
+								</button>
+							</div>
+							<div class="col-sm-1" style="text-align:left;">
+								<a style="margin-left:50px" class="btn btn-default" onclick="reset();"> <span
+									class="glyphicon glyphicon-refresh"></span>&nbsp;清空
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<a style="width: 100px;"  class="btn default" href="../complaints/complaintList">
+							<span class="glyphicon glyphicon-hand-left"></span>&nbsp;返回
+						</a>
+						<a class="btn default" onclick="delBatch()"> <span class="glyphicon glyphicon-remove">
+							</span>&nbsp;批量删除
+						</a>
+					</div>
+				</div>
+				<table class="table table-hover table-striped table-bordered" id="commentsTable">
+					<thead>
+						<tr>
+							<th width="2%" style="text-align: center;">
+								<input type="checkbox" id="check-all">
+							</th>
+							<th width="5%" style="text-align: center;">投诉单ID</th>
+							<th width="5%" style="text-align: center;">公司ID</th>
+							<th width="5%" style="text-align: center;">用户ID</th>
+							<th width="5%" style="text-align: center;">头像</th>
+							<th width="5%" style="text-align: center;">姓名</th>
+							<th width="10%" style="text-align: center;">评论内容</th>
+							<th width="5%" style="text-align: center;">评论时间</th>
+							<th width="5%" style="text-align: center;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#foreach($obj in $pagesModel.results)
+						<tr>
+							<td align="center">
+								<input type="checkbox" value="${obj.id}" class="child-check">
+							</td>
+							<td align="center">$!obj.id</td>
+							<td align="center">$!obj.compid</td>
+							<td align="center">$!obj.userid</td>
+							<td align="center"><img src="$!obj.complUserRes.img" width="100px"></td>
+							<td align="center">$!obj.complUserRes.username</td>
+							<td align="center">
+								<p style="width:250px;overflow:hidden;text-overflow:ellipsis;white-space:norwap;">
+									$!obj.comment
+								</p>
+							</td>
+							<td align="center">$!date.format('yyyy-MM-dd HH:mm:ss',$!obj.time)</td>
+							<td align="center">
+								<a class="btn default" onclick="deleteComment($!obj.id);"> 
+								   <span class="glyphicon glyphicon-remove"></span>&nbsp;删除
+								</a>
+							</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+				#parse("htmls/global/listPage.html")
+			</div>
+		</div>
+	</form>
+	<!-- 全局公共类库Begin -->
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../plugin/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript">
+		$("#check-all").click(function(){
+			$(".child-check").prop("checked",$(this).prop("checked"));
+		});
+		$(document).on("click",".child-check",function(){
+			var flag = $(".child-check").length == $(".child-check:checked").length;
+			$("#check-all").prop("checked",flag);
+		});
+		//清空查询条件
+		function reset() {
+			$('#query_id').val("");
+			$('#query_userid').val("");
+		}
+		function deleteComment(id) {
+			swal({
+				title : "提示",
+				text : "确定删除吗？",
+				type : "warning",
+				showCancelButton : "true",
+				showConfirmButton : "true",
+				confirmButtonText : "确定",
+				cancelButtonText : "取消",
+				animation : "slide-from-top"
+			}, function() {
+				$.ajax({
+					url: "../comments/deleteComment?id="+id,
+					type: "get",
+					success: function(res){
+						if (res.data) {
+							swal("提示", "删除成功", "success");
+						} else {
+							swal("提示", "删除失败", "warning");
+						}
+						setTimeout("$('#form1').submit()",1000);
+					}
+				});
+			});
+		}
+		function delBatch(){
+			var idList = "";
+			$(".child-check:checked").each(function(){
+				idList += $(this).val() + "-"
+			});
+			idList = idList.substring(0,idList.length-1);
+			if(idList == ""){
+				swal("提示","请选择要删除的评论","warning");
+			}else{
+				swal({
+					title : "提示",
+					text : "确定批量删除吗？",
+					type : "warning",
+					showCancelButton : "true",
+					showConfirmButton : "true",
+					confirmButtonText : "确定",
+					cancelButtonText : "取消",
+					animation : "slide-from-top"
+				}, function() {
+				  	$.ajax({
+			             url : "../comments/delBatchComments/" + idList,
+			             type : "post",
+			             success : function(res) {
+			                 if (res.data) {
+			                     swal("提示", "删除成功", "success");
+			                 } else {
+			                     swal("提示", "删除失败", "warning");
+			                 }
+			                 setTimeout("$('#form1').submit()",1000);
+			             }
+			         });
+				  });
+			}
+		}
+		$("#toCheck").click(function(){
+			var id = $("#query_id").val() || "";
+			var userid = $("#query_userid").val() || "";
+			$("#id").val(id);
+			$("#userid").val(userid);
+			$('#form1').submit();
+		});
+        
+	</script>
+</body>
+</html>

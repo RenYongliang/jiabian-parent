@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>汽车详情</title>
+<link rel="stylesheet" href="../css/bootstrap.min14ed.css" type="text/css">
+<link rel="stylesheet" href="../css/style.min862f.css" type="text/css">
+<link href="../content/superui/global/css/components.min.css" id="style_components" rel="stylesheet" />
+<link rel="stylesheet" href="../plugin/sweetalert/sweetalert.css" type="text/css">
+<style>
+.manage_obj {
+	width: 326px;
+	height: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.manage_obj p {
+	margin: 0;
+}
+
+.manage_obj img {
+	max-width: 30% !important;
+	max-height: 50px !important;
+}
+</style>
+</head>
+<body style="background-color:white">
+	<form id="form1" name="form1" action="#../cars/selectCarsByCXId?cx_id=${cx_id}" method="post" class="form-horizontal">
+		<div class="page-container">
+			<div class="ibox float-e-margins">
+				<div class="row">
+					<div class="col-sm-12">
+						<a class="btn default" onclick="delBatch()"> <span class="glyphicon glyphicon-remove">
+							</span>&nbsp;批量删除
+						</a>
+						<a style="width: 100px;" class="btn default" href="#" onclick ="javascript:history.go(-1);">
+							<span class="glyphicon glyphicon-backward"></span>&nbsp;返回</a>
+					</div>
+				</div>
+				<table class="table table-hover table-striped table-bordered" id="carsTable">
+					<thead>
+						<tr>
+							<th width="3%" style="text-align: center;">
+								<input type="checkbox" id="check-all"/>
+							</th>
+							<th width="5%" style="text-align: center;">车系</th>
+							<th width="5%" style="text-align: center;">车名</th>
+							<th width="5%" style="text-align: center;">销售状态</th>
+							<th width="5%" style="text-align: center;">厂商</th>
+							<th width="5%" style="text-align: center;">上市时间</th>
+							<th width="5%" style="text-align: center;">年款</th>
+							<th width="5%" style="text-align: center;">厂商指导价</th>
+							<th width="5%" style="text-align: center;">级别</th>
+							<th width="5%" style="text-align: center;">发动机</th>
+							<th width="5%" style="text-align: center;">结构</th>
+							<th width="3%" style="text-align: center;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#foreach($obj in $pagesModel.results)
+						<tr>
+							<td align="center">
+								<input type="checkbox" value="${obj.id}" class="child-check"/>
+							</td>
+							<td align="center">$!obj.chexi</td>
+							<td align="center">$!obj.cheming</td>
+							<td align="center">$!obj.type</td>
+							<td align="center">$!obj.changjia</td>
+							<td align="center">$!obj.shangshi_time</td>
+							<td align="center">$!obj.niankuan</td>
+							<td align="center">$!obj.zhidaojia</td>
+							<td align="center">$!obj.jibie</td>
+							<td align="center">$!obj.fadongji</td>
+							<td align="center">$!obj.jiegou</td>
+							<td align="center">
+								<a class="btn default" onclick="deleteCarById(${obj.id})"> 
+								   <span class="glyphicon glyphicon-remove"></span>&nbsp;删除
+								</a>
+							</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>
+	<!-- 全局公共类库Begin -->
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../plugin/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript">
+		for(var i = 0; i < 26; i++) {
+			var letter = String.fromCharCode(65 + i);
+			$("#zm").append($("<option value='"+letter+"'></option>").append(letter));
+		}
+		// 全选/反选
+		$("#check-all").click(function(){
+			$(".child-check").prop("checked",$(this).prop("checked"));
+		});
+		// 单选
+		$(document).on("click",".child-check",function(){
+			var flag = $(".child-check").length == $(".child-check:checked").length;
+			$("#check-all").prop("checked",flag);
+		});
+		// 根据id删除品牌
+		function deleteCarById(id) {
+			swal({
+				title : "提示",
+				text : "确定删除吗？",
+				type : "warning",
+				showCancelButton : "true",
+				showConfirmButton : "true",
+				confirmButtonText : "确定",
+				cancelButtonText : "取消",
+				animation : "slide-from-top"
+			}, function() {
+				$.ajax({
+					url : "../cars/deleteCarById?id=" + id,
+					type : "get",
+					success : function(res) {
+						//alert(res.data);
+						if (res.data) {
+							swal("提示", "删除成功", "success");
+						} else {
+							swal("提示", "删除失败", "error");
+						}
+						setTimeout("location.href='../cars/selectCarsByCXId?cx_id=${cx_id}'",500);
+					}
+				});
+			});
+		}
+		// 批量删除
+		function delBatch() {
+			var idList = "";
+			$(".child-check:checked").each(function(){
+				idList += $(this).val() + "-";
+			});
+			idList = idList.substring(0,idList.length-1);
+			if(idList==""){
+				swal("提示","请选择要删除的车型","warning");
+			}else{
+				swal({
+					title : "提示",
+					text : "确定批量删除吗？",
+					type : "warning",
+					showCancelButton : "true",
+					showConfirmButton : "true",
+					confirmButtonText : "确定",
+					cancelButtonText : "取消",
+					animation : "slide-from-top"
+				}, function() {
+				  	$.ajax({
+			             url : "../cars/delBatchCars/" + idList,
+			             type : "get",
+			             success : function(res) {
+			                 if (res.data) {
+			                     swal("提示", "删除成功", "success");
+			                 } else {
+			                     swal("提示", "删除失败", "error");
+			                 }
+			                 res = null;
+			                 setTimeout("location.href='../cars/selectCarsByCXId?cx_id=${cx_id}'",500);
+			             }
+			         });
+				});
+			}
+		}
+	</script>
+</body>
+</html>

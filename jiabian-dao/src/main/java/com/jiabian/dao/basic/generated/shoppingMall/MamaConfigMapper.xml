@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiabian.dao.basic.shoppingMall.MamaConfigMapper" >
+    <resultMap id="BaseResultMap" type="com.jiabian.beans.basic.shoppingMall.MamaConfig" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="key" property="key" jdbcType="VARCHAR" />
+        <result column="value" property="value" jdbcType="VARCHAR" />
+        <result column="mch_id" property="mch_id" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="mch_key" property="mch_key" jdbcType="VARCHAR" />
+        <result column="notify_url" property="notify_url" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, key, value, mch_id, type, mch_key, notify_url
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiabian.beans.basic.shoppingMall.MamaConfigQueryHelper" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from mama_config
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from mama_config
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.jiabian.beans.basic.shoppingMall.MamaConfig" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_config (key, value, mch_id, 
+            type, mch_key, notify_url
+            )
+        values (#{key,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{mch_id,jdbcType=VARCHAR}, 
+            #{type,jdbcType=TINYINT}, #{mch_key,jdbcType=VARCHAR}, #{notify_url,jdbcType=VARCHAR}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaConfig" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into mama_config
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="key != null" >
+                key,
+            </if>
+            <if test="value != null" >
+                value,
+            </if>
+            <if test="mch_id != null" >
+                mch_id,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="mch_key != null" >
+                mch_key,
+            </if>
+            <if test="notify_url != null" >
+                notify_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="key != null" >
+                #{key,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null" >
+                #{value,jdbcType=VARCHAR},
+            </if>
+            <if test="mch_id != null" >
+                #{mch_id,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="mch_key != null" >
+                #{mch_key,jdbcType=VARCHAR},
+            </if>
+            <if test="notify_url != null" >
+                #{notify_url,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaConfigQueryHelper" resultType="java.lang.Integer" >
+        select count(*) from mama_config
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update mama_config
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.key != null" >
+                key = #{record.key,jdbcType=VARCHAR},
+            </if>
+            <if test="record.value != null" >
+                value = #{record.value,jdbcType=VARCHAR},
+            </if>
+            <if test="record.mch_id != null" >
+                mch_id = #{record.mch_id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null" >
+                type = #{record.type,jdbcType=TINYINT},
+            </if>
+            <if test="record.mch_key != null" >
+                mch_key = #{record.mch_key,jdbcType=VARCHAR},
+            </if>
+            <if test="record.notify_url != null" >
+                notify_url = #{record.notify_url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update mama_config
+        set id = #{record.id,jdbcType=BIGINT},
+            key = #{record.key,jdbcType=VARCHAR},
+            value = #{record.value,jdbcType=VARCHAR},
+            mch_id = #{record.mch_id,jdbcType=VARCHAR},
+            type = #{record.type,jdbcType=TINYINT},
+            mch_key = #{record.mch_key,jdbcType=VARCHAR},
+            notify_url = #{record.notify_url,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jiabian.beans.basic.shoppingMall.MamaConfig" >
+        update mama_config
+        <set >
+            <if test="key != null" >
+                key = #{key,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null" >
+                value = #{value,jdbcType=VARCHAR},
+            </if>
+            <if test="mch_id != null" >
+                mch_id = #{mch_id,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="mch_key != null" >
+                mch_key = #{mch_key,jdbcType=VARCHAR},
+            </if>
+            <if test="notify_url != null" >
+                notify_url = #{notify_url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from mama_config
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.jiabian.beans.basic.shoppingMall.MamaConfigQueryHelper" >
+        delete from mama_config
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+	<select id="countMamaConfig" parameterType="java.util.Map" resultType="int">
+		select count(*)
+		<include refid="add"/>
+		where true
+		<if test="condition.key != null and condition.key != ''">
+			and `key` = '${condition.key}'
+		</if>
+		<if test="condition.mch_id != null and condition.mch_id != ''">
+			and mch_id = '${condition.mch_id}'
+		</if>
+	</select>
+
+	<select id="selectMamaConfig" parameterType="java.util.Map" resultType="com.jiabian.mama.response.MamaConfigRes">
+		select *
+		<include refid="add"/>
+		where true
+		<if test="condition.key != null and condition.key != ''">
+			and `key` = '${condition.key}'
+		</if>
+		<if test="condition.mch_id != null and condition.mch_id != ''">
+			and mch_id = '${condition.mch_id}'
+		</if>
+		<if test="pagesModel.orderBy != null">
+			order by ${pagesModel.orderBy}
+		</if>
+		<if test="pagesModel.doPage">
+			LIMIT #{pagesModel.limitStart,jdbcType=INTEGER},
+			#{pagesModel.limitNum,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<sql id="add">
+		from mama_config
+	</sql>
+
+</mapper>

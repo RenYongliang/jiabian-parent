@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>车型</title>
+<link rel="stylesheet" href="../css/bootstrap.min14ed.css" type="text/css">
+<link rel="stylesheet" href="../css/style.min862f.css" type="text/css">
+<link href="../content/superui/global/css/components.min.css" id="style_components" rel="stylesheet" />
+<link rel="stylesheet" href="../plugin/sweetalert/sweetalert.css" type="text/css">
+<style>
+.manage_obj {
+	width: 326px;
+	height: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.manage_obj p {
+	margin: 0;
+}
+
+.manage_obj img {
+	max-width: 30% !important;
+	max-height: 50px !important;
+}
+</style>
+</head>
+<body style="background-color:white">
+	<form id="form1" name="form1" action="../series/seriesList" method="get" class="form-horizontal">
+		<div class="page-container">
+			<div class="ibox float-e-margins">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top:15px">
+							<label class="control-label col-sm-1" for="chexi">车型：</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" style="width: 200px;" id="chexi" name="chexi"
+									value="" placeholder="支持模糊查询">
+							</div>
+							<label class="control-label col-sm-1" for="changjia">厂家：</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" style="width: 200px;" id="changjia" name="changjia"
+									value="" placeholder="支持模糊查询">
+							</div>
+							<label class="control-label col-sm-1" for="zm">首字母：</label>
+							<div class="col-sm-1">
+								<select class="form-control" id="zm" name="zm">
+									<option value="">全部</option>
+								</select>
+							</div>
+							<div class="col-sm-1" style="text-align:left;">
+								<button id="toCheck" type="button" style="margin-left:50px" class="btn btn-primary">
+									<span class="glyphicon glyphicon-search"></span>&nbsp;查询
+								</button>
+							</div>
+							<div class="col-sm-1" style="text-align:left;">
+								<a style="margin-left:50px" class="btn btn-default" onclick="reset();"> <span
+									class="glyphicon glyphicon-refresh"></span>&nbsp;清空
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<a class="btn default" href="../series/toInsert"> <span class="glyphicon glyphicon-plus"></span>&nbsp;添加
+						</a>
+						<a class="btn default" onclick="delBatch()"> <span class="glyphicon glyphicon-remove">
+							</span>&nbsp;批量删除
+						</a>
+					</div>
+				</div>
+				<table class="table table-hover table-striped table-bordered" id="seriesTable">
+					<thead>
+						<tr>
+							<th width="3%" style="text-align: center;">
+								<input type="checkbox" id="check-all"/>
+							</th>
+							<th width="5%" style="text-align: center;">车型编号</th>
+							<th width="10%" style="text-align: center;">车型</th>
+							<th width="10%" style="text-align: center;">厂家</th>
+							<th width="5%" style="text-align: center;">最低价(万元)</th>
+							<th width="5%" style="text-align: center;">最高价(万元)</th>
+							<th width="5%" style="text-align: center;">时间</th>
+							<th width="3%" style="text-align: center;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#foreach($obj in $pagesModel.results)
+						<tr>
+							<td align="center">
+								<input type="checkbox" value="${obj.id}" class="child-check"/>
+							</td>
+							<td align="center">$!obj.cx_id</td>
+							<td align="center"><a href="../cars/selectCarsByCXId?cx_id=${obj.cx_id}">$!obj.chexi</a></td>
+							<td align="center">$!obj.changjia</td>
+							<td align="center">$!obj.dijia</td>
+							<td align="center">$!obj.gaojia</td>
+							<td align="center">
+								$!obj.time.substring(0,4)-$!obj.time.substring(4,6)-$!obj.time.substring(6,8)
+							</td>
+							<td align="center">
+								<a class="btn default" onclick="deleteSeriesById(${obj.id})"> 
+								   <span class="glyphicon glyphicon-remove"></span>&nbsp;删除
+								</a>
+							</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+				#parse("htmls/global/listPage.html")
+			</div>
+		</div>
+	</form>
+	<!-- 全局公共类库Begin -->
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../plugin/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript">
+		for(var i = 0; i < 26; i++) {
+			var letter = String.fromCharCode(65 + i);
+			$("#zm").append($("<option value='"+letter+"'></option>").append(letter));
+		}
+		// 全选/反选
+		$("#check-all").click(function(){
+			$(".child-check").prop("checked",$(this).prop("checked"));
+		});
+		// 单选
+		$(document).on("click",".child-check",function(){
+			var flag = $(".child-check").length == $(".child-check:checked").length;
+			$("#check-all").prop("checked",flag);
+		});
+		// 根据id删除品牌
+		function deleteSeriesById(id) {
+			swal({
+				title : "提示",
+				text : "确定删除吗？",
+				type : "warning",
+				showCancelButton : "true",
+				showConfirmButton : "true",
+				confirmButtonText : "确定",
+				cancelButtonText : "取消",
+				animation : "slide-from-top"
+			}, function() {
+				$.ajax({
+					url : "../series/deleteSeriesById?id=" + id,
+					type : "get",
+					success : function(res) {
+						//alert(res.data);
+						if (res.data) {
+							swal("提示", "删除成功", "success");
+						} else {
+							swal("提示", "删除失败", "error");
+						}
+						setTimeout("location.href='../series/seriesList'",500);
+					}
+				});
+			});
+		}
+		// 批量删除
+		function delBatch() {
+			var idList = "";
+			$(".child-check:checked").each(function(){
+				idList += $(this).val() + "-";
+			});
+			idList = idList.substring(0,idList.length-1);
+			if(idList==""){
+				swal("提示","请选择要删除的车型","warning");
+			}else{
+				swal({
+					title : "提示",
+					text : "确定批量删除吗？",
+					type : "warning",
+					showCancelButton : "true",
+					showConfirmButton : "true",
+					confirmButtonText : "确定",
+					cancelButtonText : "取消",
+					animation : "slide-from-top"
+				}, function() {
+				  	$.ajax({
+			             url : "../series/delBatchSeries/" + idList,
+			             type : "get",
+			             success : function(res) {
+			                 if (res.data) {
+			                     swal("提示", "删除成功", "success");
+			                 } else {
+			                     swal("提示", "删除失败", "error");
+			                 }
+			                 res = null;
+			                 setTimeout("location.href='../series/seriesList'",500);
+			             }
+			         });
+				});
+			}
+		}
+		//清空查询条件
+		function reset() {
+			$('#chexi').val("");
+			$('#changjia').val("");
+			$('#zm').val("");
+		}
+		$("#toCheck").click(function(){
+			var chexi = $("#chexi").val() || "";
+			var changjia = $("#changjia").val() || "";
+			var zm = $("#zm").val() || "";
+			var condition = ""
+			if(chexi!=""){
+				condition += " and chexi like '%" + chexi + "%'";
+			}
+			if(changjia!=""){
+				condition += " and changjia like '%" + changjia + "%'";
+			}
+			if(zm!=""){
+				condition += " and zm = '" + zm + "'";
+			}
+			if(condition==""){
+				setTimeout("location.href='../series/seriesList'",300);
+				return;
+			}
+			var reqData = {
+				condition: condition,
+			}
+			$.ajax({
+				url: "../series/selectSeriesByCondition",
+				type: "get",
+				data: reqData,
+				success: function(res){
+					$("#seriesTable tbody").empty();
+					var queryRes = res.results;
+					if(queryRes != ""){
+						$("#pageDiv").attr("style","display:none");
+						$("#text").attr("style","display:none");
+						$("#size").attr("style","display:none");
+						$("#pnum").attr("style","display:none");
+						$("#pnum").next("button").attr("style","display:none");
+						$.each(queryRes,function(index,item){
+							var idTd = $("<td align='center'></td>").append($("<input type='checkbox' class='child-check' value='"+item.id+"'/>"));
+							var cx_idTd = $("<td align='center'></td>").append(item.cx_id);
+							var chexiTd = $("<td align='center'></td>").append($("<a href='../cars/selectCarsByCXId?cx_id="+item.cx_id+"'></a>").append(item.chexi));
+							var changjiaTd = $("<td align='center'></td>").append(item.changjia);
+							var dijiaTd = $("<td align='center'></td>").append(item.dijia);
+							var gaojiaTd = $("<td align='center'></td>").append(item.gaojia);
+							var timeTd = $("<td align='center'></td>").append(item.time.substring(0,4) + "-" + item.time.substring(4,6) + "-" +item.time.substring(6,8));
+							var opTd = $("<td align='center'></td>")
+									.append($("<a class='btn default' onclick='deleteSeriesById("+item.id+")'></a>")
+									.append($("<span></span>").addClass("glyphicon glyphicon-remove")
+									).append("&nbsp;删除"));
+							$("<tr></tr>").append(idTd).append(cx_idTd)
+									.append(chexiTd).append(changjiaTd).append(dijiaTd)
+									.append(gaojiaTd).append(timeTd).append(opTd).appendTo("#seriesTable tbody");
+						});
+					}
+				}
+			});
+		});
+	</script>
+</body>
+</html>

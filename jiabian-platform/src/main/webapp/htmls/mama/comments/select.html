@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>用户评论</title>
+<link rel="stylesheet" href="../css/bootstrap.min14ed.css"
+	type="text/css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="../css/style.min862f.css" type="text/css">
+<link href="../content/superui/global/css/components.min.css"
+	id="style_components" rel="stylesheet" />
+<link rel="stylesheet" href="../plugin/sweetalert/sweetalert.css"
+	type="text/css">
+<style>
+.manage_obj {
+	width: 326px;
+	height: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.manage_obj p {
+	margin: 0;
+}
+
+.manage_obj img {
+	max-width: 30% !important;
+	max-height: 50px !important;
+}
+</style>
+</head>
+<body style="background-color: white">
+	<form id="form1" name="form1" action="../mamaComments/commentList"
+		method="get" class="form-horizontal">
+		<input type="hidden" name="id" id="id" #if($id) value=$!id #end>
+		<input type="hidden" name="goodid" id="goodid" #if($goodid) value=$!goodid #end>
+		<div class="page-container">
+			<div class="ibox float-e-margins">
+				<div class="panel panel-default">
+					<div class="panel-heading">查询条件</div>
+					<div class="panel-body">
+						<div class="form-group" style="margin-top: 15px">
+							<label class="control-label col-sm-1 col-sm-offset-1"
+								for="query_id">评论ID：</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" style="width: 200px;"
+									id="query_id">
+							</div>
+							<label class="control-label col-sm-1 col-sm-offset-1"
+								for="query_goodid">商品ID：</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" style="width: 200px;"
+									id="query_goodid">
+							</div>
+							<div class="col-sm-1" style="text-align: left;">
+								<button id="toCheck" type="button" style="margin-left: 50px"
+									class="btn btn-primary">
+									<span class="glyphicon glyphicon-search"></span>&nbsp;查询
+								</button>
+							</div>
+							<div class="col-sm-1" style="text-align: left;">
+								<a style="margin-left: 50px" class="btn btn-default"
+									onclick="reset();"> <span
+									class="glyphicon glyphicon-refresh"></span>&nbsp;清空
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<a class="btn default" onclick="delMamaCommentsBatch()"> <span
+							class="glyphicon glyphicon-remove"> </span>&nbsp;批量删除
+						</a>
+					</div>
+				</div>
+				<table class="table table-hover table-striped table-bordered">
+					<thead>
+						<tr>
+							<th width="3%" style="text-align: center;"><input
+								type="checkbox" id="check-all" /></th>
+							<th width="10%" style="text-align: center;">评论ID</th>
+							<th width="10%" style="text-align: center;">商品ID</th>
+							<th width="10%" style="text-align: center;">用户ID</th>
+							<th width="30%" style="text-align: center;">评论</th>
+							<th width="10%" style="text-align: center;">时间</th>
+							<th width="10%" style="text-align: center;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#foreach($obj in $pagesModel.results)
+						<tr>
+							<td align="center"><input type="checkbox"
+								class="child-check" value="$!obj.id"></td>
+							<td align="center">$!obj.id</td>
+							<td align="center"><a onclick="showMamaGoodsInfo(${obj.goodid})">$!obj.goodid</a></td>
+							<td align="center"><a onclick="showMamaUsersInfo(${obj.userid})">$!obj.userid</a></td>
+							<td align="center"><p>$!obj.comment</p></td>
+							<td align="center">$!date.format('yyyy-MM-dd
+								HH:mm:ss',$!obj.createTime)</td>
+							<td align="center">
+								<a class="btn default"
+									onclick="deleteMamaComment(${obj.id})"> <span
+										class="glyphicon glyphicon-remove"></span>&nbsp;删除
+								</a>
+							</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+				#parse("htmls/global/listPage.html")
+			</div>
+		</div>
+	</form>
+	<div class="modal fade" id="userViewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background-color:#333">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel" style="color:#fff">用户信息</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form class="form-horizontal">
+			  <div class="form-group">
+			    <label for="user_id_static" class="col-sm-4 control-label"><b>用户ID：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="user_id_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="user_name_static" class="col-sm-4 control-label style="color: green""><b>用户姓名：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="user_name_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="user_img_static" class="col-sm-4 control-label"><b>用户头像：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="user_img_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="user_score_static" class="col-sm-4 control-label"><b>总积分：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="user_score_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="user_openid_static" class="col-sm-4 control-label"><b>OpenID：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="user_openid_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="user_createTime_static" class="col-sm-4 control-label"><b>注册时间：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="user_createTime_static"></p>
+			    </div>
+			  </div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="modal fade" id="goodViewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background-color:#333">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel" style="color:#fff">商品详情</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form class="form-horizontal">
+			  <div class="form-group">
+			    <label for="good_id_static" class="col-sm-4 control-label"><b>商品ID：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="good_id_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="good_name_static" class="col-sm-4 control-label" style="color: green"><b>商品名称：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="good_name_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="good_img_static" class="col-sm-4 control-label"><b>商品图片：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="good_img_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="good_price_static" class="col-sm-4 control-label"><b>现 价：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="good_price_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="good_orgPrice_static" class="col-sm-4 control-label"><b>原 价：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="good_orgPrice_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="good_details_static" class="col-sm-4 control-label"><b>商品详情：</b></label>
+			    <div class="col-sm-8">
+			      <p class="form-control-static" id="good_details_static"></p>
+			    </div>
+			  </div><hr>
+			  <div class="form-group">
+			    <label for="good_volume_static" class="col-sm-4 control-label"><b>销 量：</b></label>
+			    <div class="col-sm-8">
+			    	<p class="form-control-static" id="good_volume_static"></p>
+			    </div>
+			  </div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- 全局公共类库Begin -->
+	<script src="../js/jquery.min.js?v=2.1.4"></script>
+	<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="../plugin/sweetalert/sweetalert.min.js"></script>
+	<script type="text/javascript">
+		$("#query_id").val($("#id").val());
+		$("#query_goodid").val($("#goodid").val());
+		// 全选/反选
+		$("#check-all").click(function(){
+			$(".child-check").prop("checked",$(this).prop("checked"));
+		});
+		$(document).on("click",".child-check",function(){
+			var flag = $(".child-check").length == $(".child-check:checked").length;
+			$("#check-all").prop("checked",flag);
+		});
+		//清空查询条件
+		function reset() {
+			$('#query_id').val(null);
+			$('#query_goodid').val(null);
+		}
+		$("#toCheck").click(function(){
+			$("#id").val($('#query_id').val());
+			$("#goodid").val($('#query_goodid').val());
+			$("#form1").submit();
+		});
+		// 单一删除
+		function deleteMamaComment(id) {
+			swal({
+				title : "提示",
+				text : "确认操作吗？",
+				type : "warning",
+				showCancelButton : "true",
+				showConfirmButton : "true",
+				confirmButtonText : "确定",
+				cancelButtonText : "取消",
+				animation : "slide-from-top"
+			}, function() {
+				$.ajax({
+					url : "../mamaComments/deleteMamaComment",
+					data : {
+						"id" : id,
+					},
+					type : "post",
+					success : function(data) {
+						if (data.result == 200) {
+							swal("提示", "成功", "success");
+						} else {
+							swal("提示", "失败", "warning");
+						}
+						setTimeout("$('#form1').submit();",1000);
+					}
+				});
+			});
+		}
+		// 批量删除
+		function delMamaCommentsBatch(){
+			var idList = "";
+			$(".child-check:checked").each(function(){
+				idList += $(this).val() + "-"
+			});
+			idList = idList.substring(0,idList.length-1);
+			if(idList == ""){
+				swal("提示","请选择要删除的评论","warning");
+			}else{
+				swal({
+					title : "提示",
+					text : "确认批量删除吗？",
+					type : "warning",
+					showCancelButton : "true",
+					showConfirmButton : "true",
+					confirmButtonText : "确定",
+					cancelButtonText : "取消",
+					animation : "slide-from-top"
+				}, function() {
+					$.ajax({
+						url : "../mamaComments/delMamaCommentsBatch",
+						data : {
+							"idList" : idList,
+						},
+						type : "post",
+						success : function(data) {
+							if (data.result == 200) {
+								swal("提示", "成功", "success");
+							} else {
+								swal("提示", "失败", "warning");
+							}
+							setTimeout("$('#form1').submit();",1000);
+						}
+					});
+				});
+			}
+		}
+		
+		function showMamaUsersInfo(id){
+			$.ajax({
+				url : "../mamaUser/selectMamaUserById",
+				data: { "id" : id, },
+				type : "get",
+				success : function(res){
+					$("#userViewModal p").empty();
+					$("#user_id_static").text(res.id);
+					$("#user_name_static").text(res.name);
+					$("#user_img_static").append($("<img src='"+res.img+"' width='40%'>"));
+					$("#user_score_static").text(res.score);
+					$("#user_openid_static").text(res.openid);
+					$("#user_createTime_static").text(formatDateTime(new Date(res.createTime)));
+					$("#userViewModal").modal({
+						backdrop:"static"
+					});
+				}
+			});
+		}
+		function showMamaGoodsInfo(id){
+			$.ajax({
+				url : "../mamaGoods/getMamaGoodById",
+				data: { "id" : id, },
+				type : "get",
+				success : function(res){
+					$("#goodViewModal p").empty();
+					$("#good_id_static").text(res.id);
+					$("#good_name_static").text(res.name);
+					$("#good_img_static").append($("<img src='"+res.img+"' width='40%'>"));
+					$("#good_price_static").text(res.price);
+					$("#good_orgPrice_static").text(res.orgPrice);
+					//alert(res.details.replace("<p>","<p style='margin : 0'>"));
+					$("#good_details_static").append(res.details.replace("<p>","<p style='margin : 0'>"));
+					$("#good_volume_static").text(res.volume);
+					$("#goodViewModal").modal({
+						backdrop:"static"
+					});
+				}
+			});
+		}
+		var formatDateTime = function (date) {  
+            var y = date.getFullYear();  
+            var m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;  
+            var d = date.getDate();  
+            d = d < 10 ? ('0' + d) : d;  
+            var h = date.getHours();  
+            h=h < 10 ? ('0' + h) : h;  
+            var minute = date.getMinutes();  
+            minute = minute < 10 ? ('0' + minute) : minute;  
+            var second=date.getSeconds();  
+            second=second < 10 ? ('0' + second) : second;  
+            return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
+        };
+	</script>
+</body>
+</html>

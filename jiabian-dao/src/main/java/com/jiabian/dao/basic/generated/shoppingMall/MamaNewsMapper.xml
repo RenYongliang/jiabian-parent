@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.jiabian.dao.basic.shoppingMall.MamaNewsMapper">
+	<resultMap id="BaseResultMap"
+		type="com.jiabian.beans.basic.shoppingMall.MamaNews">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="briefIntroduction" property="briefIntroduction"
+			jdbcType="LONGVARCHAR" />
+		<result column="details" property="details"
+			jdbcType="LONGVARCHAR" />
+		<result column="updateTime" property="updateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="createTime" property="createTime"
+			jdbcType="TIMESTAMP" />
+		<result column="isDel" property="isDel" jdbcType="TINYINT" />
+		<result column="type" property="type" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Base_Column_List">
+		id, img, title, briefIntroduction, details, updateTime, createTime,
+		isDel, type
+	</sql>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.jiabian.beans.basic.shoppingMall.MamaNewsQueryHelper">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from mama_news
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from mama_news
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<insert id="insert"
+		parameterType="com.jiabian.beans.basic.shoppingMall.MamaNews">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into mama_news (img, title, briefIntroduction,
+		details, updateTime, createTime,
+		isDel, type)
+		values (#{img,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+		#{briefIntroduction,jdbcType=LONGVARCHAR},
+		#{details,jdbcType=LONGVARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{isDel,jdbcType=TINYINT}, #{type,jdbcType=TINYINT})
+	</insert>
+
+	<insert id="insertSelective"
+		parameterType="com.jiabian.beans.basic.shoppingMall.MamaNews">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into mama_news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="img != null">
+				img,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="briefIntroduction != null">
+				briefIntroduction,
+			</if>
+			<if test="details != null">
+				details,
+			</if>
+			<if test="updateTime != null">
+				updateTime,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="isDel != null">
+				isDel,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="img != null">
+				#{img,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="briefIntroduction != null">
+				#{briefIntroduction,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="details != null">
+				#{details,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDel != null">
+				#{isDel,jdbcType=TINYINT},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="countByExample"
+		parameterType="com.jiabian.beans.basic.shoppingMall.MamaNewsQueryHelper"
+		resultType="java.lang.Integer">
+		select count(*) from mama_news
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+
+	<update id="updateByExampleSelective" parameterType="map">
+		update mama_news
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.img != null">
+				img = #{record.img,jdbcType=VARCHAR},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.briefIntroduction != null">
+				briefIntroduction = #{record.briefIntroduction,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.details != null">
+				details = #{record.details,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				createTime = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDel != null">
+				isDel = #{record.isDel,jdbcType=TINYINT},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=TINYINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updateByExample" parameterType="map">
+		update mama_news
+		set id = #{record.id,jdbcType=BIGINT},
+		img = #{record.img,jdbcType=VARCHAR},
+		title = #{record.title,jdbcType=VARCHAR},
+		briefIntroduction = #{record.briefIntroduction,jdbcType=LONGVARCHAR},
+		details = #{record.details,jdbcType=LONGVARCHAR},
+		updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+		createTime = #{record.createTime,jdbcType=TIMESTAMP},
+		isDel = #{record.isDel,jdbcType=TINYINT},
+		type = #{record.type,jdbcType=TINYINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.jiabian.beans.basic.shoppingMall.MamaNews">
+		update mama_news
+		<set>
+			<if test="img != null">
+				img = #{img,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="briefIntroduction != null">
+				briefIntroduction = #{briefIntroduction,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="details != null">
+				details = #{details,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="updateTime != null">
+				updateTime = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDel != null">
+				isDel = #{isDel,jdbcType=TINYINT},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from mama_news
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<delete id="deleteByExample"
+		parameterType="com.jiabian.beans.basic.shoppingMall.MamaNewsQueryHelper">
+		delete from mama_news
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+
+	<select id="countMamaNews" parameterType="java.util.Map"
+		resultType="int">
+		select count(*)
+		<include refid="add"></include>
+		where true
+		<if test="condition.isDel != null">
+			and isDel = #{condition.isDel}
+		</if>
+		<if test="condition.title != null and condition.title != ''">
+			and title like '%${condition.title}%'
+		</if>
+		<if test="condition.type != 0">
+			and type = #{condition.type}
+		</if>
+	</select>
+
+	<select id="selectMamaNews" parameterType="java.util.Map"
+		resultType="com.jiabian.mama.response.MamaNewsRes">
+		select *
+		<include refid="add"></include>
+		where true
+		<if test="condition.isDel != null">
+			and isDel = #{condition.isDel}
+		</if>
+		<if test="condition.title != null and condition.title != ''">
+			and title like '%${condition.title}%'
+		</if>
+		<if test="condition.type != 0">
+			and type = #{condition.type}
+		</if>
+		<if test="pagesModel.orderBy != null">
+			order by ${pagesModel.orderBy}
+		</if>
+		<if test="pagesModel.doPage">
+			LIMIT #{pagesModel.limitStart,jdbcType=INTEGER},
+			#{pagesModel.limitNum,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<sql id="add">
+		from mama_news
+	</sql>
+
+</mapper>
