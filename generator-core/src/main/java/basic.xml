@@ -41,7 +41,7 @@
 		</javaTypeResolver>
 		<!-- targetProject:自动生成代码的位置 -->
 		<javaModelGenerator targetPackage="com.jiabian.beans.basic.shoppingMall"
-			targetProject="C:\Users\Administrator\Desktop\jiabian-parent\jiabian-dao\src\main\java">
+			targetProject="D:\ideaProjects\jiabian-parent\jiabian-dao\src\main\java">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="true" />
 			<!-- 从数据库返回的值被清理前后的空格 -->
@@ -49,18 +49,18 @@
 		</javaModelGenerator>
 
 		<sqlMapGenerator targetPackage="com.jiabian.dao.basic.generated.shoppingMall"
-			targetProject="C:\Users\Administrator\Desktop\jiabian-parent\jiabian-dao\src\main\java">
+			targetProject="D:\ideaProjects\jiabian-parent\jiabian-dao\src\main\java">
 			<property name="enableSubPackages" value="false" />
 		</sqlMapGenerator>
 
 		<javaClientGenerator type="XMLMAPPER"
 			targetPackage="com.jiabian.dao.basic.shoppingMall"
-			targetProject="C:\Users\Administrator\Desktop\jiabian-parent\jiabian-dao\src\main\java">
+			targetProject="D:\ideaProjects\jiabian-parent\jiabian-dao\src\main\java">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
 
-		<table catalog="" tableName="mama_prize" domainObjectName="MamaPrize">
+		<table catalog="" tableName="mama_reward" domainObjectName="MamaReward">
 			<property name="useActualColumnNames" value="true" />
 			<generatedKey type="post" identity="true" column="id"
 				sqlStatement="Mysql" />
