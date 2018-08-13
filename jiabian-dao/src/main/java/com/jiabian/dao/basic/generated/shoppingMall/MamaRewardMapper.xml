@@ -184,4 +184,44 @@
         </if>
     </delete>
 
+    <select id="countMamaReward" parameterType="java.util.Map" resultType="int">
+        select count(*)
+        <include refid="add"/>
+        where true
+        <if test="condition.item!=null and condition.item!=''">
+            and item like '%${condition.item}%'
+        </if>
+    </select>
+
+    <select id="selectMamaReward" parameterType="java.util.Map" resultType="com.jiabian.mama.response.MamaRewardRes">
+        select *
+        <include refid="add"/>
+        where true
+        <if test="condition.item!=null and condition.item!=''">
+            and item like '%${condition.item}%'
+        </if>
+        <if test="pagesModel.orderBy != null">
+            order by ${pagesModel.orderBy}
+        </if>
+        <if test="pagesModel.doPage">
+            LIMIT #{pagesModel.limitStart,jdbcType=INTEGER},
+            #{pagesModel.limitNum,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <update id="updateMamaRewardsBatch" parameterType="java.util.Map">
+        insert into
+        <include refid="add"/>
+        (id,integral) values
+        <foreach collection="map" index="key" item="value" open="(" close=")" separator="),(">
+          #{key},#{value}
+        </foreach>
+        on duplicate key update id=values(id);
+    </update>
+
+
+    <sql id="add">
+    	from mama_reward
+    </sql>
+
 </mapper>

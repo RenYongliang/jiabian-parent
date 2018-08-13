@@ -224,7 +224,7 @@
             and hid = #{condition.hid}
         </if>
         <if test="condition.prize!=null and condition.prize!=''">
-            and prize = #{condition.prize}
+            and prize like '%${condition.prize}%'
         </if>
 	</select>
 	

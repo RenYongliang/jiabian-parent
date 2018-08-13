@@ -7,9 +7,16 @@
  */
 package com.jiabian.dao.basic.shoppingMall;
 
+import com.jiabian.base.PagesModel;
 import com.jiabian.beans.basic.shoppingMall.MamaReward;
 import com.jiabian.beans.basic.shoppingMall.MamaRewardQueryHelper;
 import java.util.List;
+import java.util.Map;
+
+import com.jiabian.mama.request.MamaPrizeReq;
+import com.jiabian.mama.request.MamaRewardReq;
+import com.jiabian.mama.response.MamaPrizeRes;
+import com.jiabian.mama.response.MamaRewardRes;
 import org.apache.ibatis.annotations.Param;
 
 public interface MamaRewardMapper {
@@ -34,4 +41,10 @@ public interface MamaRewardMapper {
     int updateByPrimaryKeySelective(MamaReward record);
 
     int updateByPrimaryKey(MamaReward record);
+
+    Integer countMamaReward(@Param("pagesModel") PagesModel<MamaRewardReq, MamaRewardRes> pagesModel, @Param("condition") MamaRewardReq mamaRewardReq);
+
+    List<MamaRewardRes> selectMamaReward(@Param("pagesModel") PagesModel<MamaRewardReq, MamaRewardRes> pagesModel, @Param("condition") MamaRewardReq mamaRewardReq);
+
+    Integer updateMamaRewardsBatch(@Param("map") Map<Long,Integer> map);
 }

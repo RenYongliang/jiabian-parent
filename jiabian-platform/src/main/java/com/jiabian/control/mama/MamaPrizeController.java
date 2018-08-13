@@ -28,7 +28,7 @@ public class MamaPrizeController extends BaseController<MamaPrizeReq, MamaPrizeR
 	/**
 	 * 查询抽奖信息
 	 * @param map
-	 * @param mamaPReq
+	 * @param mamaPrizeReq
 	 */	
 	@RequestMapping("/prizeList")
 	public String getPrizeList(ModelMap map,MamaPrizeReq mamaPrizeReq) {

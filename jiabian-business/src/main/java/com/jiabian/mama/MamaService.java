@@ -5,37 +5,13 @@ import java.util.List;
 
 import com.jiabian.beans.basic.hotel.HomeQueryHelper;
 import com.jiabian.beans.basic.shoppingMall.*;
+import com.jiabian.dao.basic.shoppingMall.*;
+import com.jiabian.mama.request.*;
+import com.jiabian.mama.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jiabian.base.PagesModel;
-import com.jiabian.dao.basic.shoppingMall.MamaAddressMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaBannerMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaCommentMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaConfigMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaGoodsMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaNewsMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaOrderMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaPrizeMapper;
-import com.jiabian.dao.basic.shoppingMall.MamaUserMapper;
-import com.jiabian.mama.request.MamaAddressReq;
-import com.jiabian.mama.request.MamaBannerReq;
-import com.jiabian.mama.request.MamaCommentReq;
-import com.jiabian.mama.request.MamaConfigReq;
-import com.jiabian.mama.request.MamaGoodsReq;
-import com.jiabian.mama.request.MamaNewsReq;
-import com.jiabian.mama.request.MamaOrderReq;
-import com.jiabian.mama.request.MamaPrizeReq;
-import com.jiabian.mama.request.MamaUserReq;
-import com.jiabian.mama.response.MamaAddressRes;
-import com.jiabian.mama.response.MamaBannerRes;
-import com.jiabian.mama.response.MamaCommentRes;
-import com.jiabian.mama.response.MamaConfigRes;
-import com.jiabian.mama.response.MamaGoodsRes;
-import com.jiabian.mama.response.MamaNewsRes;
-import com.jiabian.mama.response.MamaOrderRes;
-import com.jiabian.mama.response.MamaPrizeRes;
-import com.jiabian.mama.response.MamaUserRes;
 import com.jiabian.util.SpringBeanUtils;
 
 @Service
@@ -67,6 +43,9 @@ public class MamaService implements IMamaService {
 	
 	@Autowired
 	private MamaPrizeMapper mamaPrizeMapper;
+
+	@Autowired
+	private MamaRewardMapper mamaRewardMapper;
 
 //==========================================================================================================================
 	@Override
@@ -396,6 +375,19 @@ public class MamaService implements IMamaService {
 		helper.createCriteria().andIdIn(ids);
 		return mamaPrizeMapper.deleteByExample(helper);
 	}
+//==========================================================================================================================
+
+	@Override
+	public PagesModel<MamaRewardReq, MamaRewardRes> selectMamaReward(
+			PagesModel<MamaRewardReq, MamaRewardRes> pagesModel, MamaRewardReq mamaRewardReq) {
+		pagesModel.setTotal(mamaRewardMapper.countMamaReward(pagesModel, mamaRewardReq));
+		if(pagesModel.getTotal() <= (pagesModel.getCurrentPage() - 1) * mamaRewardReq.getSize())
+			pagesModel.setCurrentPage(1);
+		pagesModel.setResults(mamaRewardMapper.selectMamaReward(pagesModel, mamaRewardReq));
+		return pagesModel;
+	}
+
+
 
 
 }

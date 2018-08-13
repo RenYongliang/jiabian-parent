@@ -8,24 +8,8 @@ import com.jiabian.beans.basic.shoppingMall.MamaBanner;
 import com.jiabian.beans.basic.shoppingMall.MamaGoods;
 import com.jiabian.beans.basic.shoppingMall.MamaNews;
 import com.jiabian.beans.basic.shoppingMall.MamaUser;
-import com.jiabian.mama.request.MamaAddressReq;
-import com.jiabian.mama.request.MamaBannerReq;
-import com.jiabian.mama.request.MamaCommentReq;
-import com.jiabian.mama.request.MamaConfigReq;
-import com.jiabian.mama.request.MamaGoodsReq;
-import com.jiabian.mama.request.MamaNewsReq;
-import com.jiabian.mama.request.MamaOrderReq;
-import com.jiabian.mama.request.MamaPrizeReq;
-import com.jiabian.mama.request.MamaUserReq;
-import com.jiabian.mama.response.MamaAddressRes;
-import com.jiabian.mama.response.MamaBannerRes;
-import com.jiabian.mama.response.MamaCommentRes;
-import com.jiabian.mama.response.MamaConfigRes;
-import com.jiabian.mama.response.MamaGoodsRes;
-import com.jiabian.mama.response.MamaNewsRes;
-import com.jiabian.mama.response.MamaOrderRes;
-import com.jiabian.mama.response.MamaPrizeRes;
-import com.jiabian.mama.response.MamaUserRes;
+import com.jiabian.mama.request.*;
+import com.jiabian.mama.response.*;
 
 public interface IMamaService {
 
@@ -119,5 +103,8 @@ public interface IMamaService {
 	Integer insertMamaPrize(MamaPrizeReq mamaPrizeReq);
 
 	Integer deleteMamaPrizesBatch(List<Long> ids);
+//==========================================================================================================================
+
+	PagesModel<MamaRewardReq,MamaRewardRes> selectMamaReward(PagesModel<MamaRewardReq, MamaRewardRes> pagesModel,MamaRewardReq mamaRewardReq);
 
 }
